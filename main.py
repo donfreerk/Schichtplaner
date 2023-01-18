@@ -3,9 +3,10 @@ from random import random
 
 
 class Person:
-    def __init__(self, name: str, kranfuehrer: bool):
+    def __init__(self, name: str, kranfuehrer: bool, absent: bool):
         self.name = name
         self.kranfuehrer = kranfuehrer
+        self.absent = absent
 
 
 class Schichtplan:
@@ -16,27 +17,23 @@ class Schichtplan:
         self.kranfuehrer_frueh = 0
         self.kranfuehrer_spaet = 0
 
+
+    def init(self):
+        self.fruehschicht = []
+        self.spaetschicht = []
+        self.kalenderwoche = []
+        self.kranfuehrer_frueh = 0
+        self.kranfuehrer_spaet = 0
+
     def personen_hinzufuegen(self, personen):
         self.personen = personen
 
-    # def verteilung_schicht(self, personen, schicht_pro_woche):
-    #     for i in range(schicht_pro_woche):
-    #         for j in range(len(personen)):
-    #             person = personen[j]
-    #             if person.kranfuehrer:
-    #                 if self.kranfuehrer_frueh < 1:
-    #                     self.fruehschicht.append(person)
-    #                     self.kranfuehrer_frueh += 1
-    #                 elif self.kranfuehrer_spaet < 1:
-    #                     self.spaetschicht.append(person)
-    #                     self.kranfuehrer_spaet += 1
-    #             else:
-    #                 self.fruehschicht.append(person)
-    #         self.kalenderwoche.append([self.fruehschicht, self.spaetschicht])
-    #         self.fruehschicht.clear()
-    #         self.spaetschicht.clear()
-    #         self.kranfuehrer_frueh = 0
-    #         self.kranfuehrer_spaet = 0
+    def find_replacement(self, person):
+        for employee in self.personen:
+            if employee.name != person.name and not employee.kranfuehrer and not employee.absent:
+                return employee
+        return None
+
 
     def verteilung_schicht(self, personen, schicht_pro_woche):
         for i in range(schicht_pro_woche):
@@ -56,7 +53,8 @@ class Schichtplan:
                     else:
                         # check if the employee has been scheduled for the same shift in the previous week
                         if i > 0:
-                            if person not in self.kalenderwoche[i-1][0] and person not in self.kalenderwoche[i-1][1]:
+                            if person not in self.kalenderwoche[i - 1][0] and person not in self.kalenderwoche[i - 1][
+                                1]:
                                 self.fruehschicht.append(person)
                                 additional_employee_scheduled = True
                                 break
@@ -64,7 +62,8 @@ class Schichtplan:
                             self.fruehschicht.append(person)
                             additional_employee_scheduled = True
                             break
-                # check if a kranfuehrer and an additional employee have been scheduled for the morning and evening shift
+                # check if a kranfuehrer and an additional employee have been scheduled for the morning and evening
+                # shift
                 elif not kranfuehrer_frueh_scheduled or not kranfuehrer_spaet_scheduled or not additional_employee_scheduled:
                     if not kranfuehrer_frueh_scheduled:
                         self.fruehschicht.append(person)
@@ -75,9 +74,10 @@ class Schichtplan:
                     else:
                         # check if the employee has been scheduled for the same shift in the previous week
                         if i > 0:
-                            if person not in self.kalenderwoche[i-1][0] and person not in self.kalenderwoche[i-1][1]:
+                            if person not in self.kalenderwoche[i - 1][0] and person not in self.kalenderwoche[i - 1][
+                                1]:
                                 self.fruehschicht.append(person)
-                                additional_employee_scheduled =                                 self.fruehschicht.append(person)
+                                additional_employee_scheduled = self.fruehschicht.append(person)
                                 additional_employee_scheduled = True
                                 break
                         else:
@@ -91,7 +91,7 @@ class Schichtplan:
             kranfuehrer_spaet_scheduled = False
             additional_employee_scheduled = False
 
-            #Manual input for absences and replacements
+            # Manual input for absences and replacements
             for person in self.fruehschicht:
                 if person.absent:
                     replacement_employee = self.find_replacement(person)
@@ -109,20 +109,15 @@ class Schichtplan:
                     else:
                         print("No replacement found for {}. Please contact supervisor.".format(person.name))
 
-
-
-
-
     def plan_erstellen(self, kalenderwochen):
         for i in range(kalenderwochen):
             self.verteilung_schicht(self.personen, 1)
             fruehschicht = [person.name for person in self.kalenderwoche[-1][0]]
             spaetschicht = [person.name for person in self.kalenderwoche[-1][1]]
-            print("Kalenderwoche {}: Frühschicht - {} | Spätschicht - {}".format(i + 1,fruehschicht, spaetschicht))
+            print("Kalenderwoche {}: Frühschicht - {} | Spätschicht - {}".format(i + 1, fruehschicht, spaetschicht))
 
-
-        # Prüfe auf ausgefallene Personen und suche Ersatz
-        # Prüfe auf ausgewogene Pausen zwischen den Schichten und angepasste Schichten
+            # Prüfe auf ausgefallene Personen und suche Ersatz
+            # Prüfe auf ausgewogene Pausen zwischen den Schichten und angepasste Schichten
             # Prüfe ob jede Person nicht mehr als 2 Wochen hintereinander die gleiche Schicht hat
             for i in range(len(self.kalenderwoche) - 1):
                 for j in range(len(self.kalenderwoche[i])):
@@ -150,3 +145,18 @@ class Schichtplan:
 
     # passenden Anpassungen hier vorzunehmen
 
+
+if __name__ == "__main__":
+    # Beispieldaten für Personen
+    personen = [
+        Person("Max Mustermann", False, absent=False),
+        Person("Erika Mustermann", False, absent=False),
+        Person("John Doe", True, absent=False),
+        Person("Jane Doe", False, absent=False),
+        Person("Bob Smith", False, absent=True),
+        Person("Alice Johnson", True, absent=False)
+    ]
+
+    schichtplan = Schichtplan()
+    schichtplan.personen_hinzufuegen(personen)
+    schichtplan.plan_erstellen(4)
