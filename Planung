@@ -1,0 +1,195 @@
+**Projektübersicht:**
+
+Das Projekt hat das Ziel einen Schichtplanungsalgorithmus zu entwickeln, der die Schichtplanung für das Unternehmen automatisch generiert. Der Algorithmus soll sicherstellen, dass die Schichtplanung den Anforderungen des Unternehmens entspricht, indem er die verfügbaren Personen, ihre Urlaubstage und Qualifikationen berücksichtigt. Er soll auch in der Lage sein, manuelle Eingaben wie Urlaub oder Krankheiten zu berücksichtigen und automatisch Ersatzpersonen auszuwählen.
+
+Ziele des Projekts:
+
+-   Entwicklung eines automatischen Schichtplanungsalgorithmus, der die Schichtplanung für das Unternehmen automatisch generiert.
+
+-   Berücksichtigung von Anforderungen des Unternehmens wie Verfügbarkeit von Personen, Urlaubstage und Qualifikationen.
+
+-   Möglichkeit für manuelle Eingaben wie Urlaub oder Krankheiten und Automatisierung von Ersatzpersonen.
+
+**Umfang des Projekts:**
+
+-   Entwicklung des Algorithmus in der Programmiersprache Python
+
+-   Durchführung von Tests, um die Funktionsfähigkeit des Algorithmus zu validieren
+
+-   Integrierung des Algorithmus in die bestehende IT-Infrastruktur des Unternehmens
+
+-   Erstellung von Benutzerdokumentation und Wartungs- und Supportdokumentation
+
+Dieses Projekt wird von einer Person durchgeführt, die gerade dabei ist, die notwendigen Kenntnisse und Fähigkeiten zu erwerben, um den Algorithmus erfolgreich zu entwickeln und zu implementieren. Es wird erwartet, dass die Person innerhalb von 6 Monaten die notwendigen Fähigkeiten erworben hat und das Projekt erfolgreich abschließen kann.
+
+**Anforderungsanalyse:**
+
+Das Unternehmen hat zwei Abteilungen, die Abteilung für Kranführer und eine Abteilung für andere Arbeitsbereiche. Die Abteilung für Kranführer arbeitet in zwei Schichten, Früh- und Spätschicht und hat insgesamt 6 Personen, davon sind 4 als Kranführer qualifiziert und 2 als nicht-Kranführer. Die andere Abteilung arbeitet in einer Schicht und hat keine Anforderungen an die Qualifikation als Kranführer.
+
+Geschäftsprozesse: Der Algorithmus muss in der Lage sein, die Anforderungen der Abteilungen an die Schichtplanung zu berücksichtigen. Dazu gehören die Verfügbarkeit von Personen, die Anzahl der benötigten Personen pro Schicht, die Anforderungen an die Qualifikation der Personen und die Einhaltung der Arbeitszeitvorschriften.
+
+Betriebsstunden: Die Abteilung für Kranführer arbeitet in 2 Schichten, Früh- und Spätschicht. Die andere Abteilung arbeitet in einer Schicht. Der Algorithmus muss in der Lage sein, Personen automatisch in die verschiedenen Schichten und Abteilungen einzuteilen.
+
+Anzahl der Personen: Die Abteilung für Kranführer hat insgesamt 6 Personen, davon sind 4 als Kranführer qualifiziert und 2 als nicht-Kranführer. Die andere Abteilung hat keine Anforderungen an die Qualifikation als Kranführer. Der Algorithmus muss in der Lage sein, die verfügbaren Personen automatisch auszuwählen und in die Schichtplanung einzuteilen.
+
+Anforderungen an die Schichtplanung: Das Unternehmen hat bestimmte Anforderungen an die Schichtplanung für die Abteilung für Kranführer, einschließlich der Berücksichtigung der Qualifikation als Kranführer und der Einhaltung von Arbeitszeitvorschriften.
+
+**Technische Spezifikationen:**
+
+Algorithmus: Der Algorithmus wird in Python entwickelt. Es verwendet eine Kombination aus Zufallsgeneratoren und logischen Abfragen, um die verfügbaren Personen auszuwählen und in die Schichtplanung einzuteilen. Es berücksichtigt auch manuelle Eingaben wie Urlaub oder Krankheit und wählt automatisch Ersatzpersonen aus.
+
+Programmiersprache: Python
+
+Tools: Der Algorithmus wurde mit dem Python-Framework "Pandas" entwickelt, um die Verarbeitung von Daten zu erleichtern. Es verwendet auch die "Random" Bibliothek für die Zufallsgeneratoren.
+
+Datenstrukturen: Der Algorithmus verwendet eine Tabelle mit den Personen und ihren Attributen wie Kranführerqualifikation, verfügbaren Urlaubstagen und Schichtpräferenzen. Es verwendet auch eine Tabelle für die Schichtplanung, die für jede Woche aktualisiert wird.
+
+Weitere technische Spezifikationen:
+
+-   Es enthält eine Funktion, um zufällig 2 Personen aus der Liste der verfügbaren Personen auszuwählen
+
+-   Es enthält logische Abfragen, um sicherzustellen, dass mindestens eine Person ein Kranführer ist und mindestens eine Person in der Früh- oder Spätschicht arbeitet
+
+-   Es enthält logische Abfragen, um sicherzustellen, dass die ausgewählten Personen nicht zwei Wochen hintereinander in der gleichen Schicht arbeiten
+
+-   Es enthält eine Funktion, um manuelle Eingaben wie Urlaub oder Krankheit zu berücksichtigen und automatisch Ersatzpersonen auszuwählen.
+
+-   Es gibt eine Fehlermeldung, wenn kein Ersatz möglich ist und es wird an den Vorgesetzten weitergeleitet.
+
+Dieser Algorithmus ermöglicht es dem Unternehmen, die Schichtplanung automatisch zu generieren, indem es die verfügbaren Personen, ihre Urlaubstage und Qualifikationen berücksichtigt. Es erleichtert den Prozess der Schichtplanung erheblich und minimiert mögliche Fehler, die durch manuelle Eingaben entstehen können.
+
+**Testfälle:**
+
+1.  Testfall: Verfügbarkeit von Personen
+
+-   Eingabe: 4 Personen sind für die Frühschicht verfügbar, 3 Personen sind für die Spätschicht verfügbar
+
+-   Erwartetes Ergebnis: Der Algorithmus wählt automatisch 2 Personen aus der Liste der verfügbaren Personen aus
+
+2.  Testfall: Mindestens eine Person ist Kranführer
+
+-   Eingabe: Keine Kranführer sind für die Frühschicht verfügbar
+
+-   Erwartetes Ergebnis: Der Algorithmus gibt eine Fehlermeldung aus und weist darauf hin, dass mindestens eine Person ein Kranführer sein muss
+
+3.  Testfall: Verfügbare Urlaubstage
+
+-   Eingabe: Eine Person hat nur noch 3 verfügbare Urlaubstage
+
+-   Erwartetes Ergebnis: Der Algorithmus wählt automatisch eine Ersatzperson aus
+
+4.  Testfall: Gleiche Schicht zwei Wochen hintereinander
+
+-   Eingabe: Eine Person hat bereits in der gleichen Schicht in der vorherigen Woche gearbeitet
+
+-   Erwartetes Ergebnis: Der Algorithmus wählt automatisch eine Ersatzperson aus
+
+5.  Testfall: Manuelle Eingabe (Urlaub oder Krankheit)
+
+-   Eingabe: Eine Person hat angegeben, dass sie in der nächsten Woche im Urlaub ist
+
+-   Erwartetes Ergebnis: Der Algorithmus berücksichtigt die manuelle Eingabe und wählt automatisch eine Ersatzperson 
+
+6. Testfall: Kein Ersatz verfügbar
+
+-   Eingabe: Keine Person ist verfügbar oder qualifiziert, um in der angegebenen Schicht zu arbeiten
+
+- Erwartetes Ergebnis: Der Algorithmus gibt eine Fehlermeldung aus und weist darauf hin, dass kein Ersatz verfügbar ist und dass der Vorgesetzte sich persönlich um die Schichtplanung kümmern muss.
+
+**Implementierungsplan:**
+
+1.  Schritt: Entwicklung des Algorithmus - Der Algorithmus wird von einer Person, die mit dem Projekt die Anwendungsentwicklung lernt, programmiert und getestet, um sicherzustellen, dass er den Anforderungen entspricht und fehlerfrei funktioniert.
+
+2.  Schritt: Überprüfung durch IT-Abteilung - Der Algorithmus wird von der IT-Abteilung überprüft, um sicherzustellen, dass er sich in die bestehende IT-Infrastruktur des Unternehmens integrieren lässt.
+
+3.  Schritt: Integrierung in die bestehende IT-Infrastruktur - Der Algorithmus wird in die bestehenden Systeme des Unternehmens integriert, wie z.B. die Personaldatenbank und die Schichtplanungssoftware.
+
+4.  Schritt: Schulung des Personals - Das Personal, das den Algorithmus nutzen wird, wird geschult, um sicherzustellen, dass sie ihn sicher und effektiv verwenden können.
+
+5.  Schritt: Testlauf - Der Algorithmus wird in einer Testumgebung ausgeführt, um sicherzustellen, dass er ordnungsgemäß funktioniert und dass keine Fehler auftreten.
+
+6.  Schritt: Einführung in den Produktiveinsatz - Der Algorithmus wird in den Produktiveinsatz eingeführt und das Personal beginnt damit, ihn zur Erstellung der Schichtplanung zu verwenden.
+
+7.  Schritt: Überwachung und Optimierung - Der Algorithmus wird regelmäßig überwacht, um sicherzustellen, dass er ordnungsgemäß funktioniert und um die Möglichkeit von Optimierungen zu prüfen.
+
+Dieser Implementierungsplan sorgt dafür, dass der Algorithmus sicher und erfolgreich in das Unternehmen integriert wird und dass das Personal ausreichend geschult wird, um ihn sicher und effektiv zu verwenden. Es gibt auch regelmäßige Überprüfungen und Optimierungen, um sicherzustellen, dass der Algorithmus weiterhin den Anforderungen des Unternehmens entspricht und effektiv arbeitet.
+
+**Benutzerdokumentation:**
+
+1.  Schritt: Öffnen der Schichtplanungssoftware - Der Benutzer öffnet die Schichtplanungssoftware, die den Algorithmus integriert hat.
+
+2.  Schritt: Auswahl des Datums - Der Benutzer wählt das Datum aus, für das die Schichtplanung erstellt werden soll.
+
+3.  Schritt: Ausführen des Algorithmus - Der Benutzer klickt auf den Button "Algorithmus ausführen", um den Algorithmus zu starten.
+
+4.  Schritt: Überprüfung der Ergebnisse - Der Algorithmus erstellt automatisch die Schichtplanung für das ausgewählte Datum. Der Benutzer kann die Ergebnisse überprüfen und gegebenenfalls manuelle Änderungen vornehmen.
+
+5.  Schritt: Speichern der Schichtplanung - Der Benutzer speichert die Schichtplanung, um sie für zukünftige Verwendungen zu speichern.
+
+Der Algorithmus erleichtert dem Benutzer die Erstellung der Schichtplanung und stellt sicher, dass die Anforderungen des Unternehmens erfüllt werden, einschließlich der Anforderungen an die Verfügbarkeit von Personen, die Anzahl der Kranführer und die Anzahl der
+
+**Zeitplan:**
+
+-   Entwicklung des Algorithmus: 
+
+-   Überprüfung durch IT-Abteilung: 
+
+-   Integrierung in die bestehende IT-Infrastruktur: 
+
+-   Schulung des Personals: 
+
+-   Testlauf: 
+
+-   Einführung in den Produktiveinsatz: 
+
+-   Überwachung und Optimierung: fortlaufend
+
+Meilensteine:
+
+-   Entwicklung des Algorithmus abgeschlossen:
+
+-   Integrierung in die bestehende IT-Infrastruktur abgeschlossen:
+
+-   Schulung des Personals abgeschlossen:
+
+-   Testlauf abgeschlossen:
+
+-   Einführung in den Produktiveinsatz abgeschlossen
+
+Das Projekt ist geplant, um innerhalb von  (??) Wochen abgeschlossen zu sein. Der Zeitplan ist flexibel und kann sich ändern, je nachdem, welche Herausforderungen während des Projekts auftreten. Die Überwachung und Optimierung des Algorithmus wird fortlaufend durchgeführt, um sicherzustellen, dass er den Anforderungen des Unternehmens weiterhin entspricht und effektiv arbeitet.
+
+**Risikobewertung:**
+
+-   Risiko 1: Fehler in der Programmierung des Algorithmus - Ein Fehler in der Programmierung des Algorithmus könnte dazu führen, dass die Schichtplanung nicht den Anforderungen des Unternehmens entspricht oder dass der Algorithmus nicht ordnungsgemäß funktioniert. Auswirkungen: Verzögerungen bei der Schichtplanung und Unzufriedenheit des Personals. Maßnahmen: Sorgfältige Überprüfung des Codes durch die Entwickler, um sicherzustellen, dass er fehlerfrei ist, Testlauf des Algorithmus vor der Implementierung in die Produktionsumgebung.
+
+-   Risiko 2: Unzureichende Schulung des Personals - Wenn das Personal nicht richtig geschult wird, kann es Schwierigkeiten bei der Verwendung des Algorithmus geben. Auswirkungen: Fehler bei der Schichtplanung, Unzufriedenheit des Personals. Maßnahmen: Sorgfältige Schulung des Personals, um sicherzustellen, dass sie den Algorithmus sicher und effektiv verwenden können.
+
+-   Risiko 3: Integrationsprobleme mit bestehenden Systemen - Der Algorithmus könnte Schwierigkeiten bei der Integration in die bestehenden Systeme des Unternehmens haben. Auswirkungen: Verzögerungen bei der Schichtplanung, Unzufriedenheit des Personals. Maßnahmen: Sorgfältige Überprüfung durch die IT-Abteilung, um sicherzustellen, dass der Algorithmus sich in die bestehende IT-Infrastruktur integrieren lässt.
+
+**Erfolgskriterien:**
+
+-   Anzahl der Personen, die erfolgreich in die Schicht eingeteilt werden
+
+-   Zufriedenheit des Personals mit dem Schichtplan
+
+-   Auswirkungen des Algorithmus auf die Geschäftsprozesse des Unternehmens (z.B. Produktivität, Effizienz)
+
+-   Anzahl der manuellen Anpassungen, die gemacht werden müssen
+
+-   Zeitersparnis für die Schichtplanung
+
+Diese Kriterien werden regelmäßig überwacht und ausgewertet, um sicherzustellen, dass der Algorithmus erfolgreich ist und die Anforderungen des Unternehmens erfüllt. Wenn notwendig, können Optimierungen vorgenommen werden, um die Leistung des Algorithmus zu verbessern und die Erfolgskriterien zu erreichen. Es werden auch Feedback von den Mitarbeitern und Vorgesetzten eingeholt, um sicherzustellen, dass der Algorithmus ihren Bedürfnissen entspricht und ihre Zufriedenheit verbessert. Eine regelmäßige Überwachung und Anpassung des Algorithmus sicherstellen, dass er weiterhin den Anforderungen des Unternehmens entspricht und die Geschäftsprozesse verbessert.
+
+Zukünftige Verbesserung
+
+Es gibt einige Möglichkeiten, wie Sie den Schichtplanungsalgorithmus später erweitern und verbessern können:
+
+1.  Erweiterung der Personenliste: Sie können weitere Attribute für die Personen hinzufügen, wie z.B. Erfahrungsstufe, Qualifikationen, etc., um die Schichtplanung noch präziser zu gestalten.
+
+2.  Berücksichtigung von Präferenzen: Sie können die Schichtplanung an die Präferenzen der Personen anpassen, indem Sie z.B. die Wochentage oder Schichten, die die Personen bevorzugen, berücksichtigen.
+
+3.  Automatisierung von Ersatzpersonen: Sie können den Algorithmus verbessern, indem Sie automatisch Ersatzpersonen auswählen, anstatt dass der Vorgesetzte manuell eingreifen muss.
+
+4.  Berücksichtigung von Dienstplänen: Sie können den Algorithmus erweitern, indem Sie sicherstellen, dass jede Person eine ausgewogene Anzahl von Schichten pro Monat oder Jahr hat und dass keine Person zu viele Schichten hintereinander hat.
+
+5.  Verwendung von künstlicher Intelligenz: Sie können den Algorithmus mit künstlicher Intelligenz verbessern, indem Sie Machine Learning-Modelle verwenden, um die Schichtplanung vorherzusagen und anzupassen, basierend auf historischen Daten und Trends.
