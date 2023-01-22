@@ -1,88 +1,83 @@
 import random
 
 
-class Employee:
-    def __init__(self, name, kranfuehrer=False, absent=False, qualifications=[]):
+class mitarbeiter:
+    def __init__(self, name, kranfuehrer=False, abwesend=False, qualifikationen=[]):
         self.name = name
         self.kranfuehrer = kranfuehrer
-        self.absent = absent
-        self.qualifications = qualifications
-        self.last_shift = None
+        self.abwesend = abwesend
+        self.qualifications = qualifikationen
+        self.letzte_schicht = None
 
     def __str__(self):
         return self.name
 
     def is_available(self):
-        return not self.absent
+        return not self.abwesend
 
     kalenderwoche = []
 
     def verteilung_schicht(self, personen, schicht_pro_woche):
-        crane_operators = [p for p in personen if p.kranfuehrer]
-        non_crane_operators = [p for p in personen if not p.kranfuehrer]
-        random.shuffle(crane_operators)
-        random.shuffle(non_crane_operators)
-        for i in range(schicht_pro_woche):
-            zugewiesene_mitarbeiter = {'frueh': [crane_operators[i % len(crane_operators)]],
-                                       'spaet': [crane_operators[(i + 1) % len(crane_operators)]]}
+        kranführer = [p for p in personen if p.kranfuehrer]
+        nicht_kranführer = [p for p in personen if not p.kranfuehrer]
+        random.shuffle(kranführer)
+        random.shuffle(nicht_kranführer)
 
-            for j in range(len(non_crane_operators)):
-                if non_crane_operators[j].last_shift != "frueh" and non_crane_operators[j].last_shift != "spaet":
-                    zugewiesene_mitarbeiter['frueh'].append(non_crane_operators[j])
-                    non_crane_operators[j].last_shift = "frueh"
+        kranführer_index = 0
+        nicht_kranführer_index = 0
+
+        for i in range(0, len(personen), 2):
+            zugewiesene_mitarbeiter = {'frueh': [kranführer[kranführer_index % len(kranführer)]],
+                                       'spaet': [kranführer[(kranführer_index + 1) % len(kranführer)]]}
+
+            kranführer_index += 2
+            if kranführer_index >= len(kranführer):
+                kranführer_index = 0
+
+            while nicht_kranführer_index < len(nicht_kranführer):
+                if nicht_kranführer[nicht_kranführer_index].letzte_schicht != "frueh" and nicht_kranführer[
+                    nicht_kranführer_index].letzte_schicht != "spaet":
+                    zugewiesene_mitarbeiter['frueh'].append(nicht_kranführer[nicht_kranführer_index])
+                    nicht_kranführer[nicht_kranführer_index].letzte_schicht = "frueh"
                     break
-            for j in range(len(non_crane_operators)):
-                if non_crane_operators[j].last_shift != "frueh" and non_crane_operators[j].last_shift != "spaet":
-                    zugewiesene_mitarbeiter['spaet'].append(non_crane_operators[j])
-                    non_crane_operators[j].last_shift = "spaet"
+                nicht_kranführer_index += 1
+            nicht_kranführer_index = 0
+            while nicht_kranführer_index < len(nicht_kranführer):
+                if nicht_kranführer[nicht_kranführer_index].letzte_schicht != "frueh" and nicht_kranführer[
+                    nicht_kranführer_index].letzte_schicht != "spaet":
+                    zugewiesene_mitarbeiter['spaet'].append(nicht_kranführer[nicht_kranführer_index])
+                    nicht_kranführer[nicht_kranführer_index].letzte_schicht = "spaet"
                     break
+                nicht_kranführer_index += 1
+            nicht_kranführer_index = 0
 
             self.kalenderwoche.append(zugewiesene_mitarbeiter)
 
-    def mitarbeiter_einer_schicht_zuordnen(self, person, zugewiesene_mitarbeiter):
-        if person.kranfuehrer:
-            if not zugewiesene_mitarbeiter['frueh']:
-                zugewiesene_mitarbeiter['frueh'].append(person)
-            else:
-                zugewiesene_mitarbeiter['spaet'].append(person)
-        else:
-            if not zugewiesene_mitarbeiter['frueh']:
-                zugewiesene_mitarbeiter['frueh'].append(person)
-            else:
-                zugewiesene_mitarbeiter['spaet'].append(person)
-
-    def check_vorige_woche(self, person, i):
-        return person in self.kalenderwoche[i]['frueh'] or person in self.kalenderwoche[i]['spaet']
-
-    def ersatz_finden(self, person):
-        for ersatz_kandidat in personen:
-            if ersatz_kandidat.kranfuehrer == person.kranfuehrer and ersatz_kandidat.is_available():
-                return ersatz_kandidat
-                return None
-
+    # ToDo Korrigieren das alle Mitarbeiter einer Schicht zugewiesen werden und input mit einbauen für manuelle
+    #  änderungen einbauen
     def print_output(self):
-        for i, week in enumerate(self.kalenderwoche):
+        for i, woche in enumerate(self.kalenderwoche):
             print(f'Week {i + 1}:')
-            print(f'Morning shift: {[str(e) for e in week["frueh"]]}')
-            print(f'Evening shift: {[str(e) for e in week["spaet"]]}')
+            print(f'Morning shift: {[str(e) for e in woche["frueh"]]}')
+            print(f'Evening shift: {[str(e) for e in woche["spaet"]]}')
 
 
-# Create instances of the Employee class
-john_doe = Employee(name="John Doe", kranfuehrer=True)
-jane_smith = Employee(name="Jane Smith", kranfuehrer=False)
-bob_johnson = Employee(name="Bob Johnson", kranfuehrer=True)
-mike_brown = Employee(name="Mike Brown", kranfuehrer=False)
-marie_johnson = Employee(name="Marie Johnson", kranfuehrer=True)
-tom_brown = Employee(name="Tom Brown", kranfuehrer=False)
-# create a list of employee objects
+# Instanzen der Klasse Employee erstellen
+john_doe = mitarbeiter(name="John Doe", kranfuehrer=True)
+jane_smith = mitarbeiter(name="Jane Smith", kranfuehrer=False)
+bob_johnson = mitarbeiter(name="Bob Johnson", kranfuehrer=True)
+mike_brown = mitarbeiter(name="Mike Brown", kranfuehrer=False)
+marie_johnson = mitarbeiter(name="Marie Johnson", kranfuehrer=True)
+tom_brown = mitarbeiter(name="Tom Brown", kranfuehrer=False)
+# eine Liste von Mitarbeiterobjekten erstellen
 personen = [john_doe, jane_smith, bob_johnson, mike_brown, marie_johnson, tom_brown]
 
-# Create an instance of the Employee class
-manager = Employee(name="Manager")
+# Eine Instanz der Klasse Employee erstellen
+manager = mitarbeiter(name="Manager")
 
-# Assign shifts to each employee
-num_of_weeks = 12
+# Jedem Mitarbeiter eine Schicht zuweisen
+num_of_weeks = 5
 manager.verteilung_schicht(personen, num_of_weeks)
 
-# Print the shift schedule
+# Schichtplan ausgeben
 manager.print_output()
