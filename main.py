@@ -1,176 +1,88 @@
-import csv
 import random
 
 
-class Person:
-    def __init__(self, name: str, kranfuehrer: bool, absent: bool, urlaubstage: int):
+class Employee:
+    def __init__(self, name, kranfuehrer=False, absent=False, qualifications=[]):
         self.name = name
         self.kranfuehrer = kranfuehrer
-        self.urlaubstage = urlaubstage
         self.absent = absent
+        self.qualifications = qualifications
+        self.last_shift = None
 
+    def __str__(self):
+        return self.name
 
-class Schichtplan:
-    def __init__(self):
-        self.fruehschicht = []
-        self.spaetschicht = []
-        self.kalenderwoche = []
-        self.kranfuehrer_frueh = 0
-        self.kranfuehrer_spaet = 0
-        self.frueh_personen = []
-        self.spaet_personen = []
+    def is_available(self):
+        return not self.absent
 
-    # def init(self):
-    #     self.fruehschicht = []
-    #     self.spaetschicht = []
-    #     self.kalenderwoche = []
-    #     self.kranfuehrer_frueh = 0
-    #     self.kranfuehrer_spaet = 0
-
-    def personen_hinzufuegen(self, personen):
-        self.personen = personen
-        print(self.personen)
-
-    def find_replacement(self, person):
-        for employee in self.personen:
-            if employee.name != person.name and not employee.kranfuehrer and not employee.absent:
-                return employee
-        return None
+    kalenderwoche = []
 
     def verteilung_schicht(self, personen, schicht_pro_woche):
+        crane_operators = [p for p in personen if p.kranfuehrer]
+        non_crane_operators = [p for p in personen if not p.kranfuehrer]
+        random.shuffle(crane_operators)
+        random.shuffle(non_crane_operators)
         for i in range(schicht_pro_woche):
-            kranfuehrer_frueh_geplant = False
-            kranfuehrer_spaet_geplant = False
-            zusätzlicher_mitarbeiter_geplant = False
-            for j in range(len(personen)):
-                person = personen[j]
-                # Prüfen, ob der Mitarbeiter ein Kranführer ist
-                if person.kranfuehrer:
-                    if not kranfuehrer_frueh_geplant:
-                        self.fruehschicht.append(person)
-                        kranfuehrer_frueh_geplant = True
-                    elif not kranfuehrer_spaet_geplant:
-                        self.spaetschicht.append(person)
-                        kranfuehrer_spaet_geplant = True
-                    else:
-                        # prüfen, ob der Arbeitnehmer in der Vorwoche für dieselbe Schicht eingeplant war
-                        if i > 0:
-                            if person not in self.kalenderwoche[i - 1][0] and person not in self.kalenderwoche[i - 1][
-                                1]:
-                                self.fruehschicht.append(person)
-                                zusätzlicher_mitarbeiter_geplant = True
-                                break
-                        else:
-                            self.fruehschicht.append(person)
-                            zusätzlicher_mitarbeiter_geplant = True
-                            break
-                # prüfen, ob ein Kranführer und ein zusätzlicher Mitarbeiter für die Früh- und Spätschicht eingeplant
-                # worden sind
+            zugewiesene_mitarbeiter = {'frueh': [crane_operators[i % len(crane_operators)]],
+                                       'spaet': [crane_operators[(i + 1) % len(crane_operators)]]}
 
-                elif not kranfuehrer_frueh_geplant or not kranfuehrer_spaet_geplant or not zusätzlicher_mitarbeiter_geplant:
-                    if not kranfuehrer_frueh_geplant:
-                        self.fruehschicht.append(person)
-                        zusätzlicher_mitarbeiter_geplant = True
-                    elif not kranfuehrer_spaet_geplant:
-                        self.spaetschicht.append(person)
-                        zusätzlicher_mitarbeiter_geplant = True
-                    else:
-                        # prüfen, ob der Arbeitnehmer in der Vorwoche für dieselbe Schicht eingeplant war
-                        if i > 0:
-                            if person not in self.kalenderwoche[i - 1][0] and person not in self.kalenderwoche[i - 1][
-                                1]:
-                                self.fruehschicht.append(person)
-                                zusätzlicher_mitarbeiter_geplant = self.fruehschicht.append(person)
-                                zusätzlicher_mitarbeiter_geplant = True
-                                break
-                        else:
-                            self.fruehschicht.append(person)
-                            zusätzlicher_mitarbeiter_geplant = True
-                            break
-            self.kalenderwoche.append([self.fruehschicht, self.spaetschicht])
+            for j in range(len(non_crane_operators)):
+                if non_crane_operators[j].last_shift != "frueh" and non_crane_operators[j].last_shift != "spaet":
+                    zugewiesene_mitarbeiter['frueh'].append(non_crane_operators[j])
+                    non_crane_operators[j].last_shift = "frueh"
+                    break
+            for j in range(len(non_crane_operators)):
+                if non_crane_operators[j].last_shift != "frueh" and non_crane_operators[j].last_shift != "spaet":
+                    zugewiesene_mitarbeiter['spaet'].append(non_crane_operators[j])
+                    non_crane_operators[j].last_shift = "spaet"
+                    break
 
-            kranfuehrer_frueh_geplant = False
-            kranfuehrer_spaet_geplant = False
-            zusätzlicher_mitarbeiter_geplant = False
+            self.kalenderwoche.append(zugewiesene_mitarbeiter)
 
-            # Manuelle Eingabe für Abwesenheiten und Vertretungen
-            for person in self.fruehschicht:
-                if person.absent:
-                    ersatz_mitarbeiter = self.find_replacement(person)
-                    if ersatz_mitarbeiter:
-                        self.fruehschicht.remove(person)
-                        self.fruehschicht.append(ersatz_mitarbeiter)
-                    else:
-                        print("Kein Ersatz für {} gefunden. Bitte kontaktieren Sie Ihren Vorgesetzten.".format(
-                            person.name))
-            for person in self.spaetschicht:
-                if person.absent:
-                    ersatz_mitarbeiter = self.find_replacement(person)
-                    if ersatz_mitarbeiter:
-                        self.spaetschicht.remove(person)
-                        self.spaetschicht.append(ersatz_mitarbeiter)
-                    else:
-                        print("Kein Ersatz für {} gefunden. Bitte kontaktieren Sie Ihren Vorgesetzten.".format(
-                            person.name))
+    def mitarbeiter_einer_schicht_zuordnen(self, person, zugewiesene_mitarbeiter):
+        if person.kranfuehrer:
+            if not zugewiesene_mitarbeiter['frueh']:
+                zugewiesene_mitarbeiter['frueh'].append(person)
+            else:
+                zugewiesene_mitarbeiter['spaet'].append(person)
+        else:
+            if not zugewiesene_mitarbeiter['frueh']:
+                zugewiesene_mitarbeiter['frueh'].append(person)
+            else:
+                zugewiesene_mitarbeiter['spaet'].append(person)
 
-    def plan_erstellen(self, kalenderwochen):
-        for i in range(kalenderwochen):
-            self.verteilung_schicht(self.personen, 1)
-            fruehschicht = [person.name for person in self.kalenderwoche[-1][0]]
-            spaetschicht = [person.name for person in self.kalenderwoche[-1][1]]
-            print("Kalenderwoche {}: Frühschicht - {} | Spätschicht - {}".format(i + 1, fruehschicht, spaetschicht))
+    def check_vorige_woche(self, person, i):
+        return person in self.kalenderwoche[i]['frueh'] or person in self.kalenderwoche[i]['spaet']
 
-            # Prüfe auf ausgefallene Personen und suche Ersatz
-            # Prüfe auf ausgewogene Pausen zwischen den Schichten und angepasste Schichten
-            #Prüfe, ob jede Person nicht mehr als 2 Wochen hintereinander die gleiche Schicht hat
-            # for i in range(len(self.kalenderwoche) - 1):
-            #     for j in range(len(self.kalenderwoche[i])):
-            #         for person in self.kalenderwoche[i][j]:
-            #             if person in self.kalenderwoche[i + 1][j]:
-            #                 # # einen Ersatzmitarbeiter zu finden und ihn in den Zeitplan aufzunehmen
-            #                 # ersatz_mitarbeiter = random.choice([x for x in self.personen if
-            #                 #                                       x not in self.kalenderwoche[i][j] and x not in
-            #                 #                                       self.kalenderwoche[i + 1][j]])
-            #                 # index = self.kalenderwoche[i + 1][j].index(person)
-            #                 # self.kalenderwoche[i + 1][j][index] = ersatz_mitarbeiter
-            #                 # Prüfe auf ausgefallene Personen und suche Ersatz
-            #                 ersatz_mitarbeiter = [x for x in self.personen if
-            #                                       x not in self.kalenderwoche[i - 1][0] and x not in
-            #                                       self.kalenderwoche[i - 1][1] and x.urlaubstage == 0]
-            #                 if len(ersatz_mitarbeiter) > 0:
-            #                     replacement_employee = random.choice(ersatz_mitarbeiter)
-            #                 else:
-            #                     pass
-                                #print("kein Ersatz möglich")
-                                # oder sende eine Meldung an Vorgesetzten
+    def ersatz_finden(self, person):
+        for ersatz_kandidat in personen:
+            if ersatz_kandidat.kranfuehrer == person.kranfuehrer and ersatz_kandidat.is_available():
+                return ersatz_kandidat
+                return None
 
-            #Überprüfe, ob der Plan die Urlaubstage aller Personen berücksichtigt und fair verteilt
-            for i in range(len(self.kalenderwoche)):
-                for j in range(len(self.kalenderwoche[i])):
-                    for person in self.kalenderwoche[i][j]:
-                        # prüfen, ob der Arbeitnehmer noch Urlaubstage hat
-                        if person.urlaubstage > 0:
-                            # einen Ersatzmitarbeiter zu finden und ihn in den Zeitplan aufzunehmen
-                            ersatz_mitarbeiter = random.choice(
-                                [x for x in self.personen if x not in self.kalenderwoche[i][j]])
-                            index = self.kalenderwoche[i][j].index(person)
-                            self.kalenderwoche[i][j][index] = ersatz_mitarbeiter
-                            person.urlaubstage -= 1
-
-    # passenden Anpassungen hier vorzunehmen
+    def print_output(self):
+        for i, week in enumerate(self.kalenderwoche):
+            print(f'Week {i + 1}:')
+            print(f'Morning shift: {[str(e) for e in week["frueh"]]}')
+            print(f'Evening shift: {[str(e) for e in week["spaet"]]}')
 
 
-if __name__ == "__main__":
-    # Beispieldaten für Personen
-    personen = [
-        Person("Max Mustermann", False, absent=False, urlaubstage=0),
-        Person("Erika Mustermann", False, absent=False, urlaubstage=0),
-        Person("John Doe", True, absent=False, urlaubstage=0),
-        Person("Jane Doe", False, absent=False, urlaubstage=0),
-        Person("Bob Smith", False, absent=True, urlaubstage=0),
-        Person("Alice Johnson", True, absent=False, urlaubstage=0)
-    ]
+# Create instances of the Employee class
+john_doe = Employee(name="John Doe", kranfuehrer=True)
+jane_smith = Employee(name="Jane Smith", kranfuehrer=False)
+bob_johnson = Employee(name="Bob Johnson", kranfuehrer=True)
+mike_brown = Employee(name="Mike Brown", kranfuehrer=False)
+marie_johnson = Employee(name="Marie Johnson", kranfuehrer=True)
+tom_brown = Employee(name="Tom Brown", kranfuehrer=False)
+# create a list of employee objects
+personen = [john_doe, jane_smith, bob_johnson, mike_brown, marie_johnson, tom_brown]
 
-    schichtplan = Schichtplan()
-    schichtplan.personen_hinzufuegen(personen)
-    schichtplan.plan_erstellen(4)
+# Create an instance of the Employee class
+manager = Employee(name="Manager")
+
+# Assign shifts to each employee
+num_of_weeks = 12
+manager.verteilung_schicht(personen, num_of_weeks)
+
+# Print the shift schedule
+manager.print_output()
